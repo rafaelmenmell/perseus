@@ -4,14 +4,14 @@ library(dplyr)
 library(tidytext)
 library(tidyr)
 library(ggplot2)
-library(igraph)
+# library(igraph)
 
   con <- file("http://www.gutenberg.org/cache/epub/16452/pg16452.txt",open="r")
   lines <- readLines(con)
-  book.start <- vector("integer",24)
+  lines.split <- vector("integer",24)
   for (book in 1:24){
     search <- sprintf("BOOK %s\\.",as.roman(book))
-    book.start[book] <- last(which(grepl(search,lines)==TRUE)) #porque la primera vez que aparece es el índice
+    lines.split[book] <- last(which(grepl(search,lines)==TRUE)) #porque la primera vez que aparece es el índice
   }
   final <- '                  \\*       \\*       \\*       \\*       \\*'
   libros <- vector("list",24)
@@ -52,7 +52,9 @@ library(igraph)
   
   #frecuencia
   freq <- libros.df %>% anti_join(stop_words) %>% group_by(book) %>% count(word,sort=TRUE) %>% group_by(book)
-  freq <- split(freq,freq$book)  
+  freq <- split(freq,freq$book) 
+  freq10 <- lapply(freq, FUN=function(x) x[1:10,])
+  
   #sentimientos cada 25 lineas
   sentiments <- libros.df %>% inner_join(get_sentiments("bing")) %>% count(book,index = line %/% 25, sentiment) %>% spread(sentiment, n, fill = 0) %>%  mutate(sentiment = positive - negative)
 
