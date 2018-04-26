@@ -2,9 +2,7 @@
 title: "Text mining in R. A different approach to _The Iliad_"
 author: "Rafael Menéndez"
 fig_width: 10
-output:
-  html_document:
-    keep_md: true
+output: github_document
 ---
 
 <style>
